@@ -1,0 +1,1 @@
+This is a javascript project in which you play rock paper scissors versus the computer within the console
