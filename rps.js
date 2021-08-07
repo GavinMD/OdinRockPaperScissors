@@ -1,3 +1,11 @@
+const scoreMax = 5;
+let winnerString;
+let player_score = 0;
+let computer_score = 0;
+let playerSelection;
+let computerSelection;
+
+//randomly choose one of the 3 options for the computer player
 function computerPlayer() {
     let choice = Math.floor((Math.random() * 100) % 3 ) + 1;
 
@@ -13,72 +21,96 @@ function computerPlayer() {
     }
 }
 
-function playRound(playerSelection, computerSelection) {
+//play a round of rps with computer
+function playRound() {
+    console.log(this.dataset.choice);
+    playerSelection = this.dataset.choice;
+    playerSelection.toLowerCase();
+    computerSelection = computerPlayer();
+
     if(playerSelection = "rock"){
         switch(computerSelection){
             case "rock":
-                console.log("Draw, Rock draws Rock");
-                return 0;
+                winnerString = ("Draw, Rock draws Rock");
+                break;
             case "paper":
-                console.log("Lose, Rock loses to Paper");
-                return -1;
+                winnerString = ("Lose, Rock loses to Paper");
+                computer_score++;
+                break;
             case "scissors":
-                console.log("Win, Rock beats Scissors");
-                return 1;
+                winnerString = ("Win, Rock beats Scissors");
+                player_score++;
         }
     }
     else if(playerSelection = "paper"){
         switch(computerSelection){
             case "rock":
-                console.log("Win, Paper beats Rock");
-                return 1;
+                winnerString = ("Win, Paper beats Rock");
+                player_score++;
+                break;
             case "paper":
-                console.log("Draw, Paper draws Paper");
-                return 0;
+                winnerString = ("Draw, Paper draws Paper");
+                break;
             case "scissors":
-                console.log("Lose, Paper loses to Rock");
-                return -1;
+                winnerString = ("Lose, Paper loses to Rock");
+                computer_score++;
         }
     }
     else{
         switch(computerSelection){
             case "rock":
-                console.log("Lose, Scissors loses to Rock");
-                return -1;
+                winnerString = ("Lose, Scissors loses to Rock");
+                computer_score++;
+                break;
             case "paper":
-                console.log("Win, Scissors beats Paper");
-                return 1;
+                winnerString = ("Win, Scissors beats Paper");
+                player_score++;
+                break;
             case "scissors":
-                console.log("Draw, Scissors draws Scissors");
-                return 0;
+                winnerString = ("Draw, Scissors draws Scissors");
         }
     }
-  }
+  
+    scoreDiv.textContent = "Player Score: " + player_score +
+                         " Computer Score: " + computer_score;
+    resultDiv.textContent = winnerString;
 
-  function game(rounds){
-    let player_score = 0;
-    let computer_score = 0;
-    for(i = 0; i < rounds; i++){
-        const playerSelection = prompt("Enter rock paper or scissors: ").toLowerCase();
-        const computerSelection = computerPlayer();
-        let result = playRound(playerSelection,computerSelection);
-        if(result === 1){
-            player_score++;
-        }
-        else if(result === -1){
-            computer_score++;
-        }
-    }
+    //if score limit is reached display the winner screen
+    if(player_score === scoreMax || computer_score === scoreMax){
+        console.log("game called");
+        game();
+      }
+}
+  
+  function game(){
+
+    //game results calculation and display
     if(player_score > computer_score){
-        console.log("Player is the winner with " + player_score + " points!");
+        winnerString = "Player is the winner with " + player_score + " points!";
     }
     else if(player_score < computer_score){
-        console.log("Computer is the winner with " + computer_score + " points!");
+        winnerString = "Computer is the winner with " + computer_score + " points!";
     }
     else{
-        console.log("The game ended with a draw!");
+        winnerString = "The game ended with a draw!";
     }
+
+    resultDiv.textContent = winnerString;
+    player_score = 0;
+    computer_score = 0;
   }
   
+  //add event listener for each button on the page
+  let rps = document.querySelectorAll('.btn');
+  rps.forEach(choice => choice.addEventListener('click', playRound));
 
-  game(5);
+  // display scores
+  let scoreDiv = document.querySelector(`div[id='score']`);
+  scoreDiv.textContent = "Player Score: " + player_score +
+                         " Computer Score: " + computer_score;
+
+  //show winner string
+  let resultDiv = document.querySelector(`div[id='result']`);
+  resultDiv.textContent = winnerString;
+
+  
